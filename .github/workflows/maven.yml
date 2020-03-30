@@ -9,9 +9,6 @@ on:
   pull_request:
     branches: [ master ]
 
-env:
-  DOCKER_IMAGE_TAG: $(echo $GITHUB_SHA | cut -c1-7)
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,6 +29,11 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
+    - name: Create Image Tag Name
+      run: |
+          echo $GITHUB_SHA
+          export IMAGE_TAG="$(echo $GITHUB_SHA | cut -c1-7)"
+          echo "::set-env name=DOCKER_IMAGE_TAG::$IMAGE_TAG"
     - run: echo $DOCKER_IMAGE_TAG
     - uses: actions/checkout@v2
     - name: download the build
@@ -44,5 +46,5 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: navyateja/fromgithub
-        tags: ${{ env.DOCKER_IMAGE_TAG }}
+        tags: $DOCKER_IMAGE_TAG
 
