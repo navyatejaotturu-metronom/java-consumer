@@ -62,6 +62,7 @@ jobs:
       - name: Interact with the cluster
         run: kubectl get nodes
   accessCluster:
+    needs: [setupMinikube]
     name: minikube interaction
     runs-on: [ubuntu-latest]
     steps:
