@@ -29,7 +29,8 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-    - name: package the build
+    - uses: actions/checkout@v2
+    - name: download the build
       uses: actions/download-artifact@master
       with:
         name: webpack artifacts
