@@ -32,6 +32,7 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
+    - run: echo $DOCKER_IMAGE_TAG
     - uses: actions/checkout@v2
     - name: download the build
       uses: actions/download-artifact@master
@@ -43,5 +44,5 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: navyateja/fromgithub
-        tags: $DOCKER_IMAGE_TAG
+        tags: ${{ DOCKER_IMAGE_TAG }}
 
