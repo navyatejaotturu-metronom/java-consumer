@@ -10,41 +10,60 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Set up JDK 1.8
+#       uses: actions/setup-java@v1
+#       with:
+#         java-version: 1.8
+#     - name: Build with Maven
+#       run: mvn clean install
+#     - name: package the build
+#       uses: actions/upload-artifact@master
+#       with:
+#         name: webpack artifacts
+#         path: target/Consumer-0.0.1-SNAPSHOT.jar
+#   dockerBuildPush:
+#     needs: [build]
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Create Image Tag Name
+#       run: |
+#           echo $GITHUB_SHA
+#           export IMAGE_TAG="$(echo $GITHUB_SHA | cut -c1-7)"
+#           echo "::set-env name=DOCKER_IMAGE_TAG::$IMAGE_TAG"
+#     - run: echo $DOCKER_IMAGE_TAG
+#     - uses: actions/checkout@v2
+#     - name: download the build
+#       uses: actions/download-artifact@master
+#       with:
+#         name: webpack artifacts
+#         path: .
+#     - uses: docker/build-push-action@v1
+#       with:
+#         username: ${{ secrets.DOCKER_USERNAME }}
+#         password: ${{ secrets.DOCKER_PASSWORD }}
+#         repository: navyateja/fromgithub
+#         tags: ${{ env.DOCKER_IMAGE_TAG }}
+  setupMinikube:
+    name: Example Minikube-Kubernetes Cluster interaction
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
-    - name: Build with Maven
-      run: mvn clean install
-    - name: package the build
-      uses: actions/upload-artifact@master
-      with:
-        name: webpack artifacts
-        path: target/Consumer-0.0.1-SNAPSHOT.jar
-  dockerBuildPush:
-    needs: [build]
-    runs-on: ubuntu-latest
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v1.0.1
+        with:
+          minikube version: 'v1.5.2'
+          kubernetes version: 'v1.16.2'
+          github token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Interact with the cluster
+        run: kubectl get nodes
+  accessCluster:
+    name: minikube interaction
+    runs-on: [ubuntu-latest]
     steps:
-    - name: Create Image Tag Name
-      run: |
-          echo $GITHUB_SHA
-          export IMAGE_TAG="$(echo $GITHUB_SHA | cut -c1-7)"
-          echo "::set-env name=DOCKER_IMAGE_TAG::$IMAGE_TAG"
-    - run: echo $DOCKER_IMAGE_TAG
-    - uses: actions/checkout@v2
-    - name: download the build
-      uses: actions/download-artifact@master
-      with:
-        name: webpack artifacts
-        path: .
-    - uses: docker/build-push-action@v1
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: navyateja/fromgithub
-        tags: ${{ env.DOCKER_IMAGE_TAG }}
-
+      - name: Nodes get
+        run: kubectl get nodes
