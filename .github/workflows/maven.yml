@@ -55,6 +55,11 @@ jobs:
     name: Example Minikube-Kubernetes Cluster interaction
     runs-on: ubuntu-latest
     steps:
+      - name: Create Image Tag Name
+        run: |
+          echo $GITHUB_SHA
+          export IMAGE_TAG="$(echo $GITHUB_SHA | cut -c1-7)"
+          echo "::set-env name=DOCKER_IMAGE_TAG::$IMAGE_TAG"
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup Minikube
