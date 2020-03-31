@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: javaconsumer
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      service: javaconsumer
+  template:
+    metadata:
+      labels:
+        service: javaconsumer
+    spec:
+      containers:
+      - name: javaconsumer
+        image: __DOCKER_IMAGE__
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          protocol: TCP
