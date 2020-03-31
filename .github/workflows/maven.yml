@@ -46,7 +46,7 @@ jobs:
         path: .
     - uses: docker/build-push-action@v1
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
+        username: navyateja
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: ${{ env.DOCKER_IMAGE }}
         tags: ${{ env.DOCKER_IMAGE_TAG }}
