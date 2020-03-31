@@ -51,6 +51,7 @@ jobs:
         repository: ${{ env.DOCKER_IMAGE }}
         tags: ${{ env.DOCKER_IMAGE_TAG }}
   setupMinikube:
+    needs: [dockerBuildPush]
     name: Example Minikube-Kubernetes Cluster interaction
     runs-on: ubuntu-latest
     steps:
