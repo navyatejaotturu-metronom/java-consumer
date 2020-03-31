@@ -71,7 +71,7 @@ jobs:
       - name: Interact with the cluster
         run: kubectl get nodes
       - name: Apply Deployment
-        run: cat ci/deployment.yaml | sed -e s~__DOCKER_IMAGE__~${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG}}~ | kubectl apply -f -
+        run: cat ci/deployment.yaml | sed -e s~__DOCKER_IMAGE__~navyateja/fromgithub:${{ env.DOCKER_IMAGE_TAG}}~ | kubectl apply -f -
       - name: Apply Service
         run: kubectl apply -f ci/service.yaml
       - name: Display Pods
