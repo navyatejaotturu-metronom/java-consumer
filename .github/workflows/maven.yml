@@ -20,6 +20,7 @@ jobs:
       run: |
           echo "Hello World! From runner ${HOSTNAME}"
           sleep 60
+          echo "I am done sleeping"
   # build:
   #   runs-on: ubuntu-latest
   #   steps:
