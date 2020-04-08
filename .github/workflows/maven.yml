@@ -38,7 +38,7 @@ jobs:
   #       name: webpack artifacts
   #       path: target/Consumer-0.0.1-SNAPSHOT.jar
   dockerBuildPush:
-    needs: [simple]
+    needs: [build]
     runs-on: self-hosted
     steps:
     - name: Create Image Tag Name
@@ -48,11 +48,11 @@ jobs:
           echo "::set-env name=DOCKER_IMAGE_TAG::$IMAGE_TAG"
     - run: echo $DOCKER_IMAGE_TAG
     - uses: actions/checkout@v2
-    - name: download the build
-      uses: actions/download-artifact@master
-      with:
-        name: webpack artifacts
-        path: .
+    # - name: download the build
+    #   uses: actions/download-artifact@master
+    #   with:
+    #     name: webpack artifacts
+    #     path: .
     - uses: docker/build-push-action@v1
       with:
         username: navyateja
