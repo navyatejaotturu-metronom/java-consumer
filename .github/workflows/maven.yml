@@ -46,14 +46,20 @@ jobs:
         path: .
     - uses: docker/build-push-action@v1
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
+        username: navyateja
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: ${{ env.DOCKER_IMAGE }}
         tags: ${{ env.DOCKER_IMAGE_TAG }}
   setupMinikube:
+    needs: [dockerBuildPush]
     name: Example Minikube-Kubernetes Cluster interaction
     runs-on: ubuntu-latest
     steps:
+      - name: Create Image Tag Name
+        run: |
+          echo $GITHUB_SHA
+          export IMAGE_TAG="$(echo $GITHUB_SHA | cut -c1-7)"
+          echo "::set-env name=DOCKER_IMAGE_TAG::$IMAGE_TAG"
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup Minikube
@@ -65,7 +71,7 @@ jobs:
       - name: Interact with the cluster
         run: kubectl get nodes
       - name: Apply Deployment
-        run: cat ci/deployment.yaml | sed -e s~__DOCKER_IMAGE__~${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG}}~ | kubectl apply -f -
+        run: cat ci/deployment.yaml | sed -e s~__DOCKER_IMAGE__~navyateja/fromgithub:${{ env.DOCKER_IMAGE_TAG}}~ | kubectl apply -f -
       - name: Apply Service
         run: kubectl apply -f ci/service.yaml
       - name: Display Pods
