@@ -19,6 +19,7 @@ jobs:
     - name: Saying HI
       run: |
           echo "Hello World! From runner ${HOSTNAME}"
+          echo "Started sleeping"
           sleep 60
           echo "I am done sleeping"
   # build:
