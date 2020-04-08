@@ -13,6 +13,12 @@ env:
   DOCKER_IMAGE: navyateja/fromgithub
 
 jobs:
+  simple:
+    runs-on: self-hosted
+    steps:
+    - name: Saying HI
+      run: |
+          echo "Hello World! From runner"
   build:
     runs-on: ubuntu-latest
     steps:
